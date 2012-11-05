@@ -1,4 +1,4 @@
-import simplejson
+from django.utils import simplejson
 import urllib
 from httplib2 import Http
 import mimetypes

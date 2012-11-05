@@ -1,7 +1,7 @@
 import urllib
 from oauth2 import OAuth2Request
 import re
-import simplejson
+from django.utils import simplejson
 re_path_template = re.compile('{\w+}')
 
 def encode_string(value):
@@ -16,7 +16,7 @@ class InstagramClientError(Exception):
         return self.error_message
 
 class InstagramAPIError(Exception):
-    
+
     def __init__(self, status_code, error_type, error_message, *args, **kwargs):
         self.status_code = status_code
         self.error_type = error_type
@@ -43,7 +43,7 @@ def bind_method(**config):
             self.max_pages = kwargs.pop("max_pages", 3)
             self.parameters = {}
             self._build_parameters(args, kwargs)
-            self._build_path() 
+            self._build_path()
 
         def _build_parameters(self, args, kwargs):
             # via tweepy https://github.com/joshthecoder/tweepy/
@@ -93,7 +93,7 @@ def bind_method(**config):
                         response_objects.append(obj)
                 elif self.response_type == 'entry':
                     response_objects = self.root_class.object_from_dictionary(content_obj['data'])
-                return response_objects, content_obj.get('pagination', {}).get('next_url') 
+                return response_objects, content_obj.get('pagination', {}).get('next_url')
             else:
                 raise InstagramAPIError(status_code, content_obj['meta']['error_type'], content_obj['meta']['error_message'])
 
@@ -102,7 +102,7 @@ def bind_method(**config):
             while url and pages_read < self.max_pages:
                  response_objects, url = self._do_api_request(url, method, body, headers)
                  pages_read += 1
-                 yield response_objects, url 
+                 yield response_objects, url
             return
 
         def execute(self):

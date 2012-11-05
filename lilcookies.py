@@ -12,7 +12,7 @@ import logging
 # Ripped from the Tornado Framework's web.py
 # http://github.com/facebook/tornado/commit/39ac6d169a36a54bb1f6b9bf1fdebb5c9da96e09
 #
-# Example: 
+# Example:
 # from vendor.prayls.lilcookies import LilCookies
 # cookieutil = LilCookies(self, application_settings['cookie_secret'])
 # cookieutil.set_secure_cookie(name = 'mykey', value = 'myvalue', expires_days= 365*100)
@@ -44,8 +44,8 @@ class LilCookies:
 
   @staticmethod
   def _signed_cookie_value(cookie_secret, name, value):
-    """ Returns a signed value for use in a cookie.  
-    
+    """ Returns a signed value for use in a cookie.
+
     This is helpful to have in its own method if you need to re-use this function for other needs. """
     timestamp = str(int(time.time()))
     value = base64.b64encode(value)
@@ -73,17 +73,17 @@ class LilCookies:
       return None
 
   def __init__(self, handler, cookie_secret):
-    """You must specify the cookie_secret to use any of the secure methods. 
-    It should be a long, random sequence of bytes to be used as the HMAC 
+    """You must specify the cookie_secret to use any of the secure methods.
+    It should be a long, random sequence of bytes to be used as the HMAC
     secret for the signature.
     """
-    if len(cookie_secret) < 45: 
+    if len(cookie_secret) < 45:
       raise ValueError("LilCookies cookie_secret should at least be 45 characters long, but got `%s`" % cookie_secret)
     self.handler = handler
     self.request = handler.request
     self.response = handler.response
     self.cookie_secret = cookie_secret
-  
+
   def cookies(self):
     """A dictionary of Cookie.Morsel objects."""
     if not hasattr(self, "_cookies"):
@@ -132,10 +132,10 @@ class LilCookies:
       new_cookie[name]["path"] = path
     for k, v in kwargs.iteritems():
       new_cookie[name][k] = v
-    
+
     # The 2 lines below were not in Tornado.  Instead, they output all their cookies to the headers at once before a response flush.
     for vals in new_cookie.values():
-      self.response.headers._headers.append(('Set-Cookie', vals.OutputString(None)))
+      self.response.headers.add_header('Set-Cookie', vals.OutputString(None))
 
   def clear_cookie(self, name, path="/", domain=None):
     """Deletes the cookie with the given name."""

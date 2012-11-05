@@ -14,6 +14,25 @@ Installation on Google App Engine
 3. Fork and modify our code! Need help? Read the Google App Engine [Getting Started Guide](http://code.google.com/appengine/docs/)
 
 
+Configure your App
+------------------
+
+e.g.
+
+1. Register at http://progrium.com/localtunnel/, start it with something like `localtunnel -k ~/.ssh/id_rsa.pub 8100`.
+   Note the url, e.g. `http://42tr.localtunnel.com:8100/`
+2. Register at http://instagram.com/developer/clients/register/ - your "OAuth redirect_uri" should be something like `http://localhost:8100/instagram/callback`. Instagramm dow displays a `CLIENT ID` and `CLIENT SECRET` - copy them to the appropriate locations in `local_settings.py`
+3. Got ro https://www.dropbox.com/developers/apps and Create an App. Copy the `App Key` and `App Secret` into `local_dropbox.ini`
+
+    cp settings.py.sample settings.py
+    sed -i '' -e "s/XxxSOMETHING_RANDOMxXX/`(date;md5 /etc/* 2&>/dev/null)|md5`/" settings.py
+
+mooncrusher:Instadrop md$ cp prod_dropbox.ini.sample prod_dropbox.ini
+mooncrusher:Instadrop md$ cp local_dropbox.ini.sample local_dropbox.ini
+mooncrusher:Instadrop md$
+
+
+
 Follow @instagramapi on Twitter
 ----------------------------
 You should [follow @instagramapi on Twitter](http://twitter.com/#!/instagramapi) for announcements,
@@ -28,6 +47,18 @@ Join the mailing list!
 Did you fork this app to create something cool?
 -----------------------------------------------
 Add it to the [apps](http://github.com/Instagram/Instadrop/wiki/apps) wiki!
+
+
+How this works
+--------------
+
+First the application requests OAuth access to Instagramm and Dropbox. It stores
+the tokens received in an `Profile` instance.
+
+The awsome [subscriptions](http://instagram.com/developer/realtime/) feature of Instagramm is
+then used to make Instagramm notify us of all new images posted.
+Since this uses the Pubsubhubub challenge flow it gets somewhat complicated:
+
 
 
 Contributing
